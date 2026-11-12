@@ -1,15 +1,29 @@
 
-name: Check iRPC
+name: Build iRPC
 
 on:
   workflow_dispatch:
 
 jobs:
-  inspect:
+  build:
     runs-on: macos-latest
     steps:
-      - name: Download source
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Find Xcode schemes
-        run: xcodebuild -list -project iRPC.xcodeproj
+      - name: Build iRPC for iPad
+        run: |
+          xcodebuild \
+            -project iRPC.xcodeproj \
+            -scheme iRPC \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Upload iRPC app
+        uses: actions/upload-artifact@v4
+        with:
+          name: iRPC-build
+          path: build/Build/Products/Release-iphoneos/iRPC.app
