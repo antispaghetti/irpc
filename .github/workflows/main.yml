@@ -1,0 +1,15 @@
+
+name: Check iRPC
+
+on:
+  workflow_dispatch:
+
+jobs:
+  inspect:
+    runs-on: macos-latest
+    steps:
+      - name: Download source
+        uses: actions/checkout@v4
+
+      - name: Find Xcode schemes
+        run: xcodebuild -list -project iRPC.xcodeproj
